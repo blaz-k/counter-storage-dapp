@@ -7,11 +7,26 @@
 
     <div class="row mt-5">
       <div class="col-md-4 offset-md-4">
-        <input class="form-control" placeholder="Enter new counter value" />
+        <input
+          class="form-control"
+          placeholder="Enter new counter value"
+          v-model="newCounter"
+          :disabled="waitingCounter"
+        />
 
         <br />
+        <!-- <p>{{ newCounter }}</p> -->
 
-        <button class="btn btn-warning">Change Counter</button>
+        <button class="btn btn-warning" @click="changeCounter">
+          <span
+            v-if="waitingCounter"
+            class="spinner-border spinner-border-sm"
+            role="status"
+            aria-hidden="true"
+          ></span>
+
+          Change Counter
+        </button>
       </div>
     </div>
   </div>
@@ -30,9 +45,26 @@ export default {
     return {
       counter: 0,
       someName: "unknown",
+      newCounter: null,
+      waitingCounter: false,
     };
   },
   methods: {
+    async changeCounter() {
+      this.waitingCounter = true;
+      const tx = await this.contract.changeCounter(this.newCounter);
+      const receipt = await tx.wait();
+      if (receipt.status === 1) {
+        console.log("Transaction succeeded");
+        console.log(receipt);
+        this.contractCounter();
+      } else {
+        console.log("Transaction failed...");
+      }
+
+      this.waitingCounter = false;
+    },
+
     async contractCounter() {
       this.counter = await this.contract.getCounter();
     },
@@ -42,7 +74,7 @@ export default {
   },
   setup() {
     const { address, balance, chainId, isActivated, signer } = useEthers();
-
+    // create contract helper object
     const contractInterface = new ethers.utils.Interface(CounterStorageAbi);
     const contractAddress = "0x8Dec08063931947e0be134A294a0047bD9e39442";
     const contract = new ethers.Contract(
@@ -50,7 +82,6 @@ export default {
       contractInterface,
       signer.value
     );
-
     return {
       address,
       balance,
