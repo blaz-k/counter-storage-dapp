@@ -15,7 +15,6 @@
         />
 
         <br />
-        <!-- <p>{{ newCounter }}</p> -->
 
         <button class="btn btn-warning" @click="changeCounter">
           <span
@@ -26,6 +25,29 @@
           ></span>
 
           Change Counter
+        </button>
+      </div>
+      <!-- cdc -->
+
+      <div class="col-md-4 offset-md-4 mt-5">
+        <input
+          class="form-control"
+          placeholder="Enter new name"
+          v-model="newName"
+          :disabled="waitingName"
+        />
+
+        <br />
+
+        <button class="btn btn-outline-warning" @click="changeName">
+          <span
+            class="spinner-border spinner-border-sm"
+            role="status"
+            aria-hidden="true"
+            v-if="waitingName"
+          ></span>
+
+          Change Name
         </button>
       </div>
     </div>
@@ -47,9 +69,25 @@ export default {
       someName: "unknown",
       newCounter: null,
       waitingCounter: false,
+      newName: null,
+      waitingName: false,
     };
   },
   methods: {
+    async changeName() {
+      this.waitingName = true;
+      const tx = await this.contract.changeName(this.newName);
+      const receipt = await tx.wait();
+      if (receipt.status === 1) {
+        console.log("Transaction succeeded");
+        this.contractGetName();
+        console.log(receipt);
+      } else {
+        console.log("Transaction failed...");
+      }
+      this.waitingName = false;
+    },
+
     async changeCounter() {
       this.waitingCounter = true;
       const tx = await this.contract.changeCounter(this.newCounter);
