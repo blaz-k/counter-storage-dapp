@@ -4,6 +4,10 @@
 
     <p>Address: {{ address }}</p>
     <p>Balance: {{ displayEther(balance) }} MATIC</p>
+    <p>chain Id : {{ chainId }}</p>
+    <p>chain Id : {{ showChainName }}</p>
+
+    <p v-if="chainId != 80001">You are on the wrong network</p>
   </div>
 </template>
 
@@ -12,14 +16,25 @@ import { useEthers, displayEther } from "vue-dapp";
 
 export default {
   name: "Profile",
+  computed: {
+    showChainName() {
+      if (this.chainId === 1) {
+        return "Ethereum";
+      } else if (this.chainId === 80001) {
+        return "Mumbai";
+      }
+    },
+  },
 
   setup() {
-    const { address, balance, isActivated } = useEthers();
+    const { address, balance, chainId, isActivated } = useEthers();
 
     return {
       address,
       balance,
+      chainId,
       isActivated,
+
       displayEther,
     };
   },
