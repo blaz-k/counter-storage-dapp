@@ -1,3 +1,10 @@
+# Counter storage
+
+#### First Dapp Project
+
+![](src/assets/counter-storage.png)
+
+<hr>
 # Vue 3 Dapp Starter
 
 Forked from [chnejohnson/vue3-dapp-starter](https://github.com/chnejohnson/vue3-dapp-starter) and adapted to use either TS or JS, and with examples without the script setup syntax. Also, Bootstrap instead of Windi CSS.
@@ -10,6 +17,7 @@ npm run dev
 ```
 
 ## Features
+
 - [Vue 3](https://v3.vuejs.org/guide/introduction.html#what-is-vue-js) as the foundation
 - [Bootstrap](https://getbootstrap.com) for styling
 - [Vite](https://vitejs.dev/guide/) for faster builds
@@ -18,7 +26,7 @@ npm run dev
 
 ## Strict TypeScript disabled
 
-In `tsconfig.json` the `strict` field is set to false, which means you can use plain JS in 
+In `tsconfig.json` the `strict` field is set to false, which means you can use plain JS in
 the project.
 
 ## Recommended IDE Setup
